@@ -161,31 +161,20 @@ config.projects.entrySet().each { projectEntry ->
                 }
                 else {
                     try {
-                        target.post(path: '/time_entries.xml', query: [api_key: targetApiKey], contentType: TEXT, requestContentType: XML, body: xmlString) { response ->
-                            if(response.statusLine.statusCode == 201) {
-                                println "Successfully imported time entry ${entry.id.text()}"
-
-                                // tag source time entry as exported
-                                def newNote = (entry.'note'.text() ? entry.'note'.text() + ' ' : '') + "#exported"
-
-                                sw = new StringWriter()
-                                xml = new MarkupBuilder(sw)
-                                xml.'time-entry' {
-                                    'note'(newNote)
-                                }
-
-                                def sourceXmlString = sw.toString()
-
-                                def resp = source.put(path: "/time_entries/${entry.id.text()}.xml", query: [api_key: sourceApiKey], contentType: TEXT, requestContentType: XML, body: sourceXmlString)
-                                if(resp.statusLine.statusCode == 200) {
-                                    println "Successfully marked time entry ${entry.id.text()} as exported"
-                                }
-                                else {
-                                    println "Error marking time entry ${entry.id.text()} as exported: ${resp.statusLine}"
-                                }
+                        if(existingTimeEntry) {
+                            def response = target.put(path: "/time_entries/${existingTimeEntry.id.text()}.xml", query: [api_key: targetApiKey], contentType: TEXT, requestContentType: XML, body: xmlString)
+                            if(response.statusLine.statusCode == 200) {
+                                println "Successfully updated existing time entry ${existingTimeEntry.id.text()}"
+                            } else {
+                                println "Error updating existing time entry ${existingTimeEntry.id.text()}: ${response.statusLine}"
                             }
-                            else {
-                                println "Error importing time entry ${entry.id.text()}: ${response.statusLine}"
+                        } else {
+                            target.post(path: '/time_entries.xml', query: [api_key: targetApiKey], contentType: TEXT, requestContentType: XML, body: xmlString) { response ->
+                                if(response.statusLine.statusCode == 201) {
+                                    println "Successfully imported time entry ${entry.id.text()}"
+                                } else {
+                                    println "Error importing time entry ${entry.id.text()}: ${response.statusLine}"
+                                }
                             }
                         }
                     }
