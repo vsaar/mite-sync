@@ -1,0 +1,2 @@
+# mite-sync
+mite-sync is a Groovy script that imports time entries from one mite account into another. It is meant for people who track their time using their own account, but are required to use a customer’s account for example.
