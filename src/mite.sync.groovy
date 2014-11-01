@@ -27,7 +27,7 @@ cli.with {
 def options = cli.parse(args)
 def configFile = new File(options.arguments() ? options.arguments()[0]: ".mite-sync")
 
-if(options."generate-config") {
+if(options."new-config") {
     configFile.text = """
 accounts {
     mycustomer {                     // account's name
