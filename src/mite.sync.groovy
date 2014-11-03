@@ -1,4 +1,5 @@
-// TODO: command line option for loading of projects/services/user
+#!/usr/bin/env groovy
+
 @Grab(group='org.codehaus.groovy.modules.http-builder', module='http-builder', version='0.5.1' )
 import groovyx.net.http.RESTClient
 import static groovyx.net.http.ContentType.XML
