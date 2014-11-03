@@ -65,3 +65,11 @@ And use the following to list all services and their IDs:
 ```
 groovy mite.sync.groovy --projects mycustomer
 ```
+
+# Execute as shell script
+If you’re on a *nix-like system (probably working on Cygwin, as well), you can make the script executable and run it directly:
+
+```
+chmod a+x mite.sync.groovy
+./mite.sync.groovy
+```
